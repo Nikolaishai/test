@@ -2,23 +2,24 @@ from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
-# Список для хранения полученных веб-хуков
-received_webhooks = []
+# Переменная для хранения последнего полученного веб-хука
+latest_webhook = None
 
-# Главная страница, отображающая полученные веб-хуки
+# Главная страница, отображающая последний полученный веб-хук
 @app.route('/')
 def home():
-    return render_template('index.html', webhooks=received_webhooks)
+    return render_template('index.html', webhook=latest_webhook)
 
 # Веб-хук
 @app.route('/webhook', methods=['POST'])
 def webhook():
+    global latest_webhook
     if request.method == 'POST':
         # Получаем данные из запроса
         data = request.get_json()
 
-        # Добавляем данные веб-хука в список
-        received_webhooks.append(data)
+        # Сохраняем только последний веб-хук
+        latest_webhook = data
 
         # Выводим данные в консоль на сервере
         print("Received webhook data:", data)

@@ -8,6 +8,7 @@ latest_webhook = None
 # Главная страница, отображающая последний полученный веб-хук
 @app.route('/')
 def home():
+    print("Отправляем данные на страницу:", latest_webhook)  # Отладочный вывод
     return render_template('index.html', webhook=latest_webhook)
 
 # Веб-хук
